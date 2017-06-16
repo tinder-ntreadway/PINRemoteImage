@@ -68,6 +68,13 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 
 @implementation PINImage (PINDecodedImage)
 
+static CGFloat pin_scale;
+
++ (void)load
+{
+    pin_scale = [UIScreen mainScreen].scale;
+}
+
 + (PINImage *)pin_decodedImageWithData:(NSData *)data
 {
     return [self pin_decodedImageWithData:data skipDecodeIfPossible:NO];
@@ -98,7 +105,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
 #if PIN_TARGET_IOS
             UIImageOrientation orientation = pin_UIImageOrientationFromImageSource(imageSourceRef);
             if (skipDecodeIfPossible) {
-                decodedImage = [PINImage imageWithCGImage:imageRef scale:1.0 orientation:orientation];
+                decodedImage = [PINImage imageWithCGImage:imageRef scale:pin_scale orientation:orientation];
             } else {
                 decodedImage = [self pin_decodedImageWithCGImageRef:imageRef orientation:orientation];
             }
@@ -156,7 +163,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
         CGImageRef newImage = CGBitmapContextCreateImage(ctx);
         
 #if PIN_TARGET_IOS
-        decodedImage = [UIImage imageWithCGImage:newImage scale:1.0 orientation:orientation];
+        decodedImage = [UIImage imageWithCGImage:newImage scale:pin_scale orientation:orientation];
 #elif PIN_TARGET_MAC
         decodedImage = [[NSImage alloc] initWithCGImage:newImage size:imageSize];
 #endif
@@ -165,7 +172,7 @@ NSData * __nullable PINImagePNGRepresentation(PINImage * __nonnull image) {
         
     } else {
 #if PIN_TARGET_IOS
-        decodedImage = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:orientation];
+        decodedImage = [UIImage imageWithCGImage:imageRef scale:pin_scale orientation:orientation];
 #elif PIN_TARGET_MAC
         decodedImage = [[NSImage alloc] initWithCGImage:imageRef size:imageSize];
 #endif

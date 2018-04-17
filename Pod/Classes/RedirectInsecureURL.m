@@ -10,7 +10,6 @@
 @property (class, nonatomic, readonly) NSString *httpPrefix;
 @property (class, nonatomic, readonly) NSString *httpsPrefix;
 @property (class, nonatomic, readonly) NSURLSession *urlSession;
-
 @property (nonatomic) NSURLSessionDataTask *dataTask;
 
 @end
@@ -36,19 +35,23 @@ static NSURLSession *_urlSession;
     return _urlSession;
 }
 
++ (NSString *)didDetectHTTPImageURLNotification {
+    return @"didDetectHTTPImageURLNotification";
+}
+
 + (void)didDetectHTTPImageURL
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"HTTP Image URL Detected" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:[self didDetectHTTPImageURLNotification] object:nil];
 }
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request
 {
-//    if ([[request.URL absoluteString] hasPrefix:self.httpPrefix]) {
-//        [self didDetectHTTPImageURL];
-//        return YES;
-//    }
+    if ([[request.URL absoluteString] hasPrefix:self.httpPrefix]) {
+        [self didDetectHTTPImageURL];
+        return YES;
+    }
     
-    return YES;
+    return NO;
 }
 
 + (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request

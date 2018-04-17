@@ -7,4 +7,6 @@
 
 @interface RedirectInsecureURL : NSURLProtocol
 
+@property (class, nonatomic, readonly) NSString *didDetectHTTPImageURLNotification;
+
 @end

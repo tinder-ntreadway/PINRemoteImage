@@ -683,7 +683,7 @@ static dispatch_once_t sharedDispatchToken;
                          
                          [strongSelf.cache.diskCache setObject:diskData
                                                         forKey:key
-                                                         block:^(PINDiskCache *cache, NSString *key, id<NSCoding> object, NSURL *fileURL)
+                                                         block:^(PINDiskCache *cache, NSString *key, id<NSCoding> object)
                           {
                               typeof(self) strongSelf = weakSelf;
                               [strongSelf lock];
@@ -887,7 +887,7 @@ static dispatch_once_t sharedDispatchToken;
                     memoryCacheObject = data;
                 }
                 
-                PINDiskCacheObjectBlock diskCacheCompletion = ^(PINDiskCache *cache, NSString *key, id<NSCoding> object, NSURL *fileURL)
+                PINDiskCacheObjectBlock diskCacheCompletion = ^(PINDiskCache *cache, NSString *key, id<NSCoding> object)
                 {
                     typeof(self) strongSelf = weakSelf;
                     [strongSelf lock];
